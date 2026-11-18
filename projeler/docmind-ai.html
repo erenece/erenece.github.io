@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DocMind-AI — Ece Eren</title>
+  <meta name="description" content="PDF, Word ya da metin dosyalarını yükleyip onlar hakkında soru sorabildiğin, cevapları yalnızca belgelerden üreten bir analiz aracı.">
+  <meta name="theme-color" content="#000000">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="alternate" hreflang="tr" href="/projeler/docmind-ai.html">
+  <link rel="alternate" hreflang="en" href="/en/projects/docmind-ai.html">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600;125,800&family=DM+Sans:opsz,wght@9..40,400;9..40,500&display=swap">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <script src="/assets/js/cursor.js" defer></script>
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <header class="nav">
+    <a class="nav__logo" href="/">ece<span class="dot"></span></a>
+    <nav class="nav__links" aria-label="Ana menü">
+      <a href="/#projeler">Projeler</a>
+      <a href="/#hizmetler">Hizmetler</a>
+      <a href="/#hakkimda">Hakkımda</a>
+      <a href="/#sertifikalar">Sertifikalar</a>
+    </nav>
+    <a class="nav__lang" href="/en/projects/docmind-ai.html" hreflang="en" lang="en" title="Switch to English">EN</a>
+    <a class="btn btn--solid" href="/#iletisim">İletişim</a>
+  </header>
+
+  <main class="container">
+
+    <!-- ===== BAŞLIK ===== -->
+    <section class="project-hero">
+      <a class="back rise" href="/#projeler">← Tüm projeler</a>
+      <span class="label label--pill rise"><span class="dot"></span>Proje · 03 / 04</span>
+      <h1 class="display rise rise--2">DocMind-AI</h1>
+      <p class="project-hero__summary rise rise--3">PDF, Word ya da metin dosyalarını yükleyip onlar hakkında soru sorabildiğin, cevapları yalnızca belgelerden üreten bir analiz aracı.</p>
+      <dl class="meta rise rise--4">
+        <div><dt>Rol</dt><dd>Tek geliştirici</dd></div>
+        <div><dt>Kapsam</dt><dd>Kişisel proje</dd></div>
+        <div><dt>Tarih</dt><dd>Nisan 2026</dd></div>
+      </dl>
+    </section>
+
+    <!-- ===== GÖRSEL / VİDEO ===== -->
+    <section class="reveal">
+        <div class="stage">
+          <div class="browser">
+            <div class="browser__bar"><i></i><i></i><i></i><span class="browser__url">github.com/erenece/DocMind-AI</span></div>
+            <video autoplay muted loop playsinline preload="metadata" poster="/assets/img/docmind-ai.jpg" aria-label="DocMind-AI demo">
+              <source src="/assets/video/docmind-ai.mp4" type="video/mp4">
+              Tarayıcın bu videoyu oynatamıyor.
+            </video>
+          </div>
+        </div>
+    </section>
+
+    <!-- ===== DETAYLAR ===== -->
+    <section class="section details">
+      <div class="reveal">
+        <h2>Öne çıkanlar</h2>
+        <ol class="highlights">
+              <li>LangChain ile RAG akışı: belgeler parçalanıyor, vektöre çevriliyor (all-MiniLM-L6-v2) ve FAISS’te indeksleniyor</li>
+              <li>Groq üzerinde çalışan Llama 3.1 8B, cevapları saniyeler içinde üretiyor</li>
+              <li>Streamlit arayüzü ve cevapları akış halinde gönderen bir FastAPI servisi</li>
+              <li>Tek komutla kurulum için Docker desteği</li>
+        </ol>
+      </div>
+      <aside class="side reveal">
+        <div>
+          <h2>Teknolojiler</h2>
+          <div class="chips"><span class="chip">Python</span><span class="chip">LangChain</span><span class="chip">FAISS</span><span class="chip">Groq</span><span class="chip">Llama 3.1</span><span class="chip">Streamlit</span><span class="chip">FastAPI</span><span class="chip">Docker</span></div>
+        </div>
+        <a class="btn btn--solid" href="https://github.com/erenece/DocMind-AI" target="_blank" rel="noopener">GitHub’da incele ↗</a>
+      </aside>
+    </section>
+
+    <!-- ===== SONRAKİ PROJE ===== -->
+    <a class="next" href="/projeler/expotrack.html">
+      <div>
+        <span class="label">Sonraki proje</span>
+        <strong class="display">ExpoTrack</strong>
+      </div>
+      <span class="arrow" aria-hidden="true">→</span>
+    </a>
+
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <p class="footer__mark display" aria-hidden="true">Ece Eren</p>
+    <div class="footer__meta">
+      <span>© 2026 · Ece Eren</span>
+      <a href="#">Başa dön ↑</a>
+      <span>Adana · uzaktan çalışmaya açık</span>
+    </div>
+  </footer>
+
+</body>
+</html>

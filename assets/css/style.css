@@ -1,0 +1,860 @@
+/* =========================================================
+   Ece Eren — Portfolyo
+   Sadece CSS. JavaScript yok.
+
+   İçindekiler
+   1. Değişkenler (renk, font, boşluk)  <- renkleri buradan değiştir
+   2. Temel ayarlar
+   3. Ortak parçalar (buton, etiket, başlık)
+   4. Navbar
+   5. Hero
+   6. Projeler (yatay kayan kartlar)
+   7. Teknoloji şeridi (marquee)
+   8. Hizmetler
+   9. Hakkımda
+   10. Sertifikalar
+   11. İletişim + footer
+   12. Proje detay sayfası
+   13. Animasyonlar
+   ========================================================= */
+
+
+/* ---------- 1. Değişkenler ---------- */
+:root {
+  --bg: #000;
+  --surface: #0c0c0c;
+  --surface-2: #151515;
+  --line: rgba(255, 255, 255, 0.1);
+  --line-strong: rgba(255, 255, 255, 0.22);
+  --text: #f4f4f2;
+  --muted: #8b8b8b;
+  --faint: #4a4a4a;
+  --accent: #9d00ff;          /* tek vurgu rengi (mor). Sitedeki bütün mor buradan gelir */
+  --on-accent: #fff;          /* mor zemin üstündeki yazı/ikon rengi (koyu mor + siyah yazı okunmaz) */
+  --accent-light: color-mix(in srgb, var(--accent) 55%, #fff); /* siyah zeminde görünmesi gereken ince detaylar için */
+
+  --font-display: 'Archivo', system-ui, sans-serif;
+  --font-body: 'DM Sans', system-ui, sans-serif;
+
+  --gutter: clamp(16px, 4vw, 48px);
+  --card: min(64vh, 520px, 82vw);   /* proje kartlarının kenar uzunluğu */
+  --max: 1240px;
+  --radius: 24px;
+}
+
+
+/* ---------- 2. Temel ayarlar ---------- */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; scroll-padding-top: 96px; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+
+img, video { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+h1, h2, h3, p, ul, ol { margin: 0; }
+ul, ol { padding: 0; list-style: none; }
+
+::selection { background: var(--accent); color: var(--on-accent); }
+
+:focus-visible { outline: 2px solid var(--accent-light); outline-offset: 3px; border-radius: 6px; }
+
+.container { width: min(var(--max), 100% - 2 * var(--gutter)); margin-inline: auto; }
+
+.section { padding-block: clamp(96px, 14vw, 180px); }
+
+
+/* ---------- 3. Ortak parçalar ---------- */
+
+/* geniş, kalın başlık fontu */
+.display {
+  font-family: var(--font-display);
+  font-stretch: 125%;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 0.95;
+}
+
+/* küçük, büyük harfli, aralıklı etiket */
+.label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.label--pill {
+  padding: 7px 14px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  color: var(--text);
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex: none;
+}
+
+/* açık zeminli kapaklarda noktalar asıl koyu mor */
+.card__type .dot,
+.stage--type .dot { background: var(--accent); }
+
+.section-head { display: grid; gap: 20px; margin-bottom: clamp(40px, 6vw, 72px); }
+.section-head h2 { font-size: clamp(40px, 7vw, 88px); }
+.section-head p { max-width: 560px; color: var(--muted); }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 24px;
+  border-radius: 999px;
+  border: 1px solid var(--line-strong);
+  font-size: 15px;
+  font-weight: 500;
+  transition: background 0.25s, color 0.25s, border-color 0.25s, transform 0.25s;
+}
+
+.btn:hover { border-color: var(--text); transform: translateY(-2px); }
+
+.btn--solid { background: var(--text); color: #000; border-color: var(--text); }
+.btn--solid:hover { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+
+.btn-row { display: flex; flex-wrap: wrap; gap: 12px; }
+
+/* yuvarlak ok ikonu (kartların köşesinde) */
+.arrow {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  flex: none;
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
+  font-size: 15px;
+  transition: background 0.3s, color 0.3s, border-color 0.3s, transform 0.3s;
+}
+
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.chip {
+  padding: 6px 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+
+/* ---------- 4. Navbar ---------- */
+.nav {
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  z-index: 50;
+  translate: -50% 0;
+  width: min(1080px, 100% - 32px);
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 8px 8px 8px 22px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(12, 12, 12, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.nav__logo {
+  font-family: var(--font-display);
+  font-stretch: 125%;
+  font-weight: 800;
+  font-size: 18px;
+  letter-spacing: -0.03em;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.nav__links { display: flex; gap: 4px; margin-inline: auto; }
+
+.nav__links a,
+.nav__lang {
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 14px;
+  color: var(--muted);
+  transition: color 0.2s, background 0.2s;
+}
+
+.nav__links a:hover,
+.nav__lang:hover { color: var(--text); background: var(--surface-2); }
+
+.nav__lang { font-weight: 600; letter-spacing: 0.08em; }
+
+.nav .btn { padding: 10px 18px; font-size: 14px; }
+
+@media (max-width: 760px) {
+  .nav__links { display: none; }
+  .nav__lang { margin-left: auto; }
+}
+
+
+/* ---------- 5. Hero ----------
+   Görünüm eski hero ile aynı (arka plan ışıkları, gradient yazı, etiket, butonlar).
+   Sadece yerleşim değişti:
+   üstte ekranı kaplayan isim, altında solda unvan / sağda kısa bilgiler,
+   en altta solda açıklama + butonlar / sağda uzmanlık. */
+.hero {
+  position: relative;
+  min-height: 100svh;
+  display: grid;
+  grid-template-rows: auto auto auto 1fr auto;
+  padding: 120px var(--gutter) clamp(40px, 6vw, 72px);
+  isolation: isolate;
+}
+
+/* arkadaki yumuşak gri ve mor ışık */
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(60% 50% at 50% 35%, rgba(255, 255, 255, 0.09), transparent 70%),
+    radial-gradient(30% 30% at 75% 70%, color-mix(in srgb, var(--accent) 35%, transparent), transparent 70%);
+}
+
+.hero .label--pill { justify-self: start; margin-bottom: clamp(16px, 2vw, 28px); }
+
+/* isim: font boyutu ekran genişliğine bağlı, satırı doldurur */
+.hero__name {
+  font-size: 17vw;
+  line-height: 0.85;
+  white-space: nowrap;
+  margin-left: -0.04em;
+}
+
+/* isimdeki her harf ayrı bir <span class="ch">: imleç değince yavaşça mora döner,
+   ayrılınca daha da yavaş eski rengine geri döner */
+.hero__name .ch { transition: color 1.8s ease; }
+.hero__name .ch:hover { color: var(--accent); transition-duration: 0.5s; }
+
+/* beyazdan griye geçen yazı (eski hero'daki ikinci satır efekti) */
+.fade-text,
+.hero__name .fade {
+  background: linear-gradient(180deg, #fff 10%, #6f6f6f 95%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hero__sub {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+  margin-top: clamp(16px, 2vw, 28px);
+}
+
+.hero__title { font-size: clamp(22px, 2.6vw, 40px); }
+
+.hero__meta {
+  display: grid;
+  justify-items: end;
+  gap: 6px;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.hero__bottom {
+  grid-row: 5;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 48px;
+  margin-top: 56px;
+}
+
+.hero__intro { display: grid; gap: 28px; }
+
+.hero__text { max-width: 560px; color: var(--muted); font-size: clamp(16px, 1.6vw, 19px); }
+
+.expertise { display: grid; gap: 14px; max-width: 380px; }
+.expertise .chips { justify-content: flex-end; }
+
+@media (max-width: 860px) {
+  .hero__bottom { flex-direction: column; align-items: flex-start; }
+  .expertise .chips { justify-content: flex-start; }
+}
+
+@media (max-width: 600px) {
+  .hero__sub { flex-direction: column; gap: 12px; }
+  .hero__meta { justify-items: start; }
+}
+
+/* ---------- 6. Projeler (yatay kayan kartlar) ----------
+   Varsayılan (mobil, eski tarayıcı): kartlar parmakla yana kaydırılır.
+   Destekleyen tarayıcıda + geniş ekranda: aşağı scroll edince kartlar sola kayar.
+   Nasıl: bölüm ekrandan uzun (320vh). İçindeki alan sticky ile ekrana yapışır.
+   Bölüm scroll edildikçe ilerleyen bir "zaman çizelgesi" (view-timeline)
+   kart şeridinin sola kayma animasyonunu yürütür. */
+.work-head { padding-top: clamp(96px, 14vw, 180px); }
+
+.work__sticky {
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  padding-bottom: 8px;
+}
+
+.work__sticky::-webkit-scrollbar { display: none; }
+
+.work__track {
+  display: flex;
+  align-items: flex-end;
+  gap: clamp(16px, 2.4vw, 32px);
+  width: max-content;
+  padding-inline: var(--gutter);
+}
+
+.card {
+  display: grid;
+  gap: 18px;
+  scroll-snap-align: center;
+}
+
+/* bütün kartlar aynı boyda kare */
+.card__media {
+  position: relative;
+  width: var(--card);
+  aspect-ratio: 1;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--surface-2);
+}
+
+.card__info { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+
+.card__title { font-size: clamp(22px, 2.2vw, 30px); }
+
+.card__sub { margin-top: 6px; font-size: 14px; color: var(--muted); }
+
+.card:hover .arrow { background: var(--accent); border-color: var(--accent); color: var(--on-accent); transform: rotate(-45deg); }
+
+/* proje kapağı: açık zemin + büyük yazı + iki mor nokta
+   cqw/cqh = kartın kendi genişliği/yüksekliğinin %1'i (container query birimi).
+   Böylece yazı dar kartta küçülür, geniş kartta büyür. */
+.card__media { container-type: size; }
+
+.card__type {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  align-content: center;
+  padding: 32px;
+  background: #ecebe6;
+  color: #111;
+  font-size: min(17cqw, 15cqh);
+  transition: transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.card:hover .card__type { transform: scale(1.03); }
+
+.card__kind {
+  position: absolute;
+  left: 32px;
+  bottom: 28px;
+  font-family: var(--font-body);
+  font-stretch: 100%;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  line-height: 1.3;
+  text-transform: uppercase;
+  color: #6b6b6b;
+}
+
+.card__type .dot { position: absolute; width: 44px; height: 44px; }
+
+/* her kartta noktalar farklı yerde */
+.card:nth-child(1) .dot:nth-child(1) { top: 12%; right: 16%; }
+.card:nth-child(1) .dot:nth-child(2) { bottom: 20%; right: 24%; }
+.card:nth-child(2) .dot:nth-child(1) { top: 14%; right: 20%; }
+.card:nth-child(2) .dot:nth-child(2) { bottom: 16%; left: 48%; }
+.card:nth-child(3) .dot:nth-child(1) { top: 12%; left: 22%; }
+.card:nth-child(3) .dot:nth-child(2) { bottom: 24%; right: 12%; }
+.card:nth-child(4) .dot:nth-child(1) { top: 14%; left: 26%; }
+.card:nth-child(4) .dot:nth-child(2) { bottom: 14%; right: 18%; }
+
+@supports (animation-timeline: view()) {
+  @media (min-width: 900px) and (prefers-reduced-motion: no-preference) {
+    /* kaydırma mesafesi: bölüm 260vh, yani 160vh boyunca kartlar kayar */
+    .work { height: 260vh; view-timeline: --work block; }
+
+    .work__sticky {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .work__track {
+      animation: slide-left linear both;
+      animation-timeline: --work;
+      animation-range: contain 0% contain 100%;
+    }
+  }
+}
+
+@keyframes slide-left {
+  /* son kart ekranın ortasına gelene kadar kay */
+  to { transform: translateX(calc(-100% + 50vw + var(--card) / 2 + var(--gutter))); }
+}
+
+
+/* ---------- 7. Teknoloji şeridi (marquee) ----------
+   Liste iki kere yazılı. Şerit kendi genişliğinin yarısı kadar kayınca
+   ikinci liste birincinin yerine oturur, böylece döngü kesintisiz görünür. */
+.marquee {
+  display: grid;
+  gap: 8px;
+  padding-block: clamp(64px, 9vw, 120px);
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+}
+
+.marquee__track {
+  display: flex;
+  width: max-content;
+  animation: marquee 45s linear infinite;
+}
+
+.marquee__track--reverse { animation-direction: reverse; }
+
+.marquee__track span {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  margin-right: 28px;
+  font-family: var(--font-display);
+  font-stretch: 125%;
+  font-weight: 600;
+  font-size: clamp(28px, 4.4vw, 56px);
+  letter-spacing: -0.03em;
+  color: var(--faint);
+  white-space: nowrap;
+  transition: color 0.3s;
+}
+
+.marquee__track span::after { content: '·'; color: var(--faint); }
+
+.marquee__track span:hover { color: var(--text); }
+
+@keyframes marquee {
+  to { transform: translateX(-50%); }
+}
+
+
+/* ---------- 8. Hizmetler ----------
+   Izgara arka planı çizgi renginde, hücreler arasında 1px boşluk var:
+   o boşluktan görünen arka plan ince çizgi gibi duruyor. */
+.services {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.service {
+  position: relative;
+  display: grid;
+  align-content: space-between;
+  gap: 48px;
+  min-height: 300px;
+  padding: clamp(24px, 3vw, 36px);
+  background: var(--surface);
+  transition: background 0.4s;
+}
+
+.service::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(80% 70% at 85% 0%, rgba(255, 255, 255, 0.07), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+
+.service:hover { background: var(--surface-2); }
+.service:hover::before { opacity: 1; }
+.service:hover .arrow { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
+
+.service__top { display: flex; align-items: center; justify-content: space-between; }
+
+.service__count {
+  font-family: var(--font-display);
+  font-stretch: 125%;
+  font-weight: 800;
+  font-size: 56px;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+.service__count small { font-family: var(--font-body); font-size: 14px; font-weight: 400; letter-spacing: 0; color: var(--muted); margin-left: 8px; }
+
+.service h3 { font-size: 22px; font-weight: 500; margin-bottom: 12px; }
+
+.service ul { display: grid; gap: 6px; color: var(--muted); font-size: 15px; margin-bottom: 18px; }
+
+.service li::before { content: '— '; color: var(--faint); }
+
+@media (max-width: 760px) {
+  .services { grid-template-columns: 1fr; }
+}
+
+
+/* ---------- 9. Hakkımda ---------- */
+.about {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: clamp(32px, 6vw, 96px);
+  align-items: start;
+}
+
+.about__portrait {
+  position: sticky;
+  top: 110px;
+  aspect-ratio: 4 / 5;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: radial-gradient(70% 60% at 50% 30%, #2a2a2a, var(--surface) 75%);
+}
+
+.about__portrait img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 0%; }
+
+.story { display: grid; gap: 20px; font-size: clamp(18px, 1.8vw, 22px); color: var(--muted); }
+.story p:first-child { color: var(--text); }
+
+.block { margin-top: clamp(56px, 7vw, 88px); }
+
+.block > h3 { margin-bottom: 8px; }
+
+/* Hakkımda'daki ara başlıklar (Deneyim, Eğitim, Yetenekler) mor */
+.about .block > h3 { color: var(--accent); }
+
+.rows { border-top: 1px solid var(--line); }
+
+.row {
+  display: grid;
+  grid-template-columns: 170px 1fr;
+  gap: 8px 24px;
+  padding-block: 24px;
+  border-bottom: 1px solid var(--line);
+}
+
+.row__time { font-size: 14px; color: var(--muted); }
+.row__title { font-weight: 500; font-size: 18px; }
+.row__org { color: var(--muted); font-size: 15px; }
+.row__desc { grid-column: 2; color: var(--muted); font-size: 15px; margin-top: 6px; }
+
+.skills { display: grid; gap: 20px; border-top: 1px solid var(--line); padding-top: 24px; }
+.skills__group { display: grid; grid-template-columns: 170px 1fr; gap: 12px 24px; align-items: center; }
+.skills__group > span { font-size: 14px; color: var(--muted); }
+.chip--learning { display: inline-flex; align-items: center; gap: 8px; }
+.chip--learning::after { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+.skills__note { font-size: 13px; color: var(--muted); display: flex; align-items: center; gap: 8px; }
+
+@media (max-width: 860px) {
+  .about { grid-template-columns: 1fr; }
+  .about__portrait { position: relative; top: 0; max-width: 380px; }
+}
+
+@media (max-width: 600px) {
+  .row, .skills__group { grid-template-columns: 1fr; }
+  .row__desc { grid-column: 1; }
+}
+
+
+/* ---------- 10. Sertifikalar ---------- */
+.featured {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 24px 40px;
+  align-items: end;
+  padding: clamp(28px, 4vw, 48px);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background:
+    radial-gradient(60% 90% at 100% 0%, color-mix(in srgb, var(--accent) 45%, transparent), transparent 70%),
+    var(--surface);
+  margin-bottom: 24px;
+}
+
+.featured h3 { font-size: clamp(26px, 3.4vw, 44px); max-width: 760px; margin-block: 18px 12px; }
+.featured p { color: var(--muted); }
+
+.certs { border-top: 1px solid var(--line); }
+
+.cert {
+  display: grid;
+  grid-template-columns: 1fr 200px 110px 90px;
+  gap: 8px 24px;
+  align-items: center;
+  padding-block: 20px;
+  border-bottom: 1px solid var(--line);
+}
+
+.cert__title { font-weight: 500; }
+.cert__issuer, .cert__date { color: var(--muted); font-size: 15px; }
+.cert a { font-size: 14px; color: var(--accent-light); justify-self: end; }
+.cert a:hover { text-decoration: underline; }
+
+.events { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+
+.event { padding: 20px; border: 1px solid var(--line); border-radius: 16px; display: grid; gap: 6px; }
+.event span { font-size: 14px; color: var(--muted); }
+
+@media (max-width: 760px) {
+  .cert { grid-template-columns: 1fr auto; }
+  .cert__issuer { grid-column: 1; }
+  .featured { grid-template-columns: 1fr; }
+}
+
+
+/* ---------- 11. İletişim + footer ---------- */
+.contact { text-align: center; display: grid; justify-items: center; gap: 28px; }
+
+.contact h2 { font-size: clamp(44px, 9vw, 120px); }
+.contact h2 .fade { color: var(--faint); }
+
+.contact__mail {
+  font-size: clamp(20px, 3.4vw, 40px);
+  border-bottom: 1px solid var(--line-strong);
+  padding-bottom: 6px;
+  transition: color 0.25s, border-color 0.25s;
+}
+
+.contact__mail:hover { color: var(--accent-light); border-color: var(--accent-light); }
+
+.footer { padding: 40px var(--gutter) 24px; overflow: hidden; }
+
+.footer__mark {
+  font-size: clamp(64px, 17vw, 280px);
+  text-align: center;
+  line-height: 0.85;
+  white-space: nowrap;
+}
+
+.footer__meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 24px;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.footer__meta a:hover { color: var(--text); }
+
+
+/* ---------- 12. Proje detay sayfası ---------- */
+.project-hero { padding: 150px 0 clamp(48px, 7vw, 80px); display: grid; gap: 28px; }
+
+.back { display: inline-flex; align-items: center; gap: 10px; font-size: 14px; color: var(--muted); width: fit-content; }
+.back:hover { color: var(--text); }
+
+.project-hero h1 { font-size: clamp(48px, 11vw, 160px); }
+
+.project-hero__summary { max-width: 760px; font-size: clamp(18px, 2vw, 24px); color: var(--muted); }
+
+.meta {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.meta div { padding: 20px 0; display: grid; gap: 6px; }
+.meta div + div { padding-left: 24px; border-left: 1px solid var(--line); }
+.meta dt { font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+.meta dd { margin: 0; }
+
+/* tarayıcı penceresi maketi */
+.browser {
+  border: 1px solid var(--line-strong);
+  border-radius: 18px;
+  overflow: hidden;
+  background: var(--surface-2);
+  box-shadow: 0 40px 120px rgba(0, 0, 0, 0.6);
+}
+
+.browser__bar { display: flex; align-items: center; gap: 7px; padding: 12px 16px; border-bottom: 1px solid var(--line); }
+.browser__bar i { width: 10px; height: 10px; border-radius: 50%; background: var(--faint); }
+
+.browser__url {
+  margin-inline: auto;
+  padding: 4px 16px;
+  border-radius: 999px;
+  background: var(--surface);
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.browser video, .browser img { width: 100%; }
+
+/* telefon maketi */
+.phone {
+  width: min(340px, 80vw);
+  margin-inline: auto;
+  padding: 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: 48px;
+  background: var(--surface-2);
+  box-shadow: 0 40px 120px rgba(0, 0, 0, 0.6);
+}
+
+.phone video { width: 100%; border-radius: 36px; aspect-ratio: 9 / 19.5; object-fit: cover; }
+
+.stage {
+  padding: clamp(24px, 6vw, 80px);
+  border-radius: var(--radius);
+  background: radial-gradient(70% 70% at 50% 0%, rgba(255, 255, 255, 0.08), transparent 70%), var(--surface);
+  border: 1px solid var(--line);
+}
+
+.stage--type {
+  display: grid;
+  place-items: center;
+  min-height: 420px;
+  background: #ecebe6;
+  color: #111;
+  position: relative;
+  overflow: hidden;
+}
+
+.stage--type p { font-size: clamp(48px, 10vw, 140px); }
+.stage--type .dot { position: absolute; width: 56px; height: 56px; }
+.stage--type .dot:nth-of-type(1) { top: 16%; left: 18%; }
+.stage--type .dot:nth-of-type(2) { bottom: 16%; right: 16%; }
+
+.details {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  gap: clamp(32px, 6vw, 96px);
+  align-items: start;
+}
+
+.details h2 { font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); font-weight: 500; margin-bottom: 20px; }
+
+.highlights { counter-reset: h; border-top: 1px solid var(--line); }
+
+.highlights li {
+  counter-increment: h;
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  padding-block: 20px;
+  border-bottom: 1px solid var(--line);
+  font-size: 18px;
+}
+
+.highlights li::before { content: counter(h, decimal-leading-zero); color: var(--faint); font-size: 14px; padding-top: 3px; }
+
+.side { position: sticky; top: 110px; display: grid; gap: 28px; padding: 28px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+.side p { font-size: 14px; color: var(--muted); }
+
+.next {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  padding-block: clamp(48px, 8vw, 96px);
+  border-top: 1px solid var(--line);
+}
+
+.next .label { display: flex; margin-bottom: 10px; }
+.next strong { font-size: clamp(36px, 7vw, 96px); }
+.next:hover .arrow { background: var(--accent); border-color: var(--accent); color: var(--on-accent); transform: rotate(-45deg); }
+
+@media (max-width: 860px) {
+  .details { grid-template-columns: 1fr; }
+  .side { position: relative; top: 0; }
+}
+
+@media (max-width: 600px) {
+  .meta { grid-template-columns: 1fr; }
+  .meta div + div { padding-left: 0; border-left: 0; border-top: 1px solid var(--line); }
+}
+
+
+/* ---------- 13. Animasyonlar ---------- */
+
+/* sayfa açılınca hero yukarı kayarak gelir */
+@media (prefers-reduced-motion: no-preference) {
+  .rise { animation: rise 1s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+  .rise--2 { animation-delay: 0.12s; }
+  .rise--3 { animation-delay: 0.24s; }
+  .rise--4 { animation-delay: 0.36s; }
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(32px); }
+}
+
+/* bölümler ekrana girerken belirir (scroll-driven, JS yok) */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      animation: rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 70%;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .marquee__track { animation: none; }
+}
+
+
+/* ---------- 14. İmleç kuyruğu (assets/js/cursor.js çiziyor) ---------- */
+.cursor-trail {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 100;
+}
